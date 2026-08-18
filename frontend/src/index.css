@@ -1,0 +1,246 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------
+   Self-hosted faces. Two rules apply to every block below:
+
+   1. NO `local()`. It makes the browser prefer a same-named font installed on
+      the visitor's machine over the bundled file, so anyone with the real
+      licensed Obviously (the designer, for one) saw a different typeface to
+      everyone else on the same page, same browser. Always ship the file.
+   2. woff2 only. Roughly 60% smaller than the .ttf/.otf originals and
+      supported everywhere except IE11. The sources are preloaded from
+      index.html so they start downloading before the hashed CSS parses.
+
+   `font-display: swap` renders fallback text immediately instead of leaving it
+   invisible while the file downloads.
+--------------------------------------------------------------- */
+
+/* Albert Sans, SIL OFL (see AlbertSans-OFL.txt). This is the upstream variable
+   font, wght 100-900, so every weight the markup asks for is a REAL instance --
+   no faux-bold, which rasterises differently on macOS vs Windows vs Android.
+   It replaces the former Regular+Medium statics: one 52KB file instead of two
+   totalling 95KB, and at wght 400/500 its metrics and advance widths are
+   identical to those statics, so existing body copy does not reflow.
+
+   The declared range starts at 400, not 100, and that is deliberate. The site
+   uses `font-extralight`(200) and `font-light`(300) on ~238 elements -- the
+   hero eyebrows and body copy especially. Back when only the 400 and 500
+   statics existed those requests found no lighter face and silently rendered
+   at 400, which is the weight the design was actually drawn against. Exposing
+   a real 200/300 makes that text markedly thinner than intended. Clamping the
+   low end preserves the intended appearance while 600/700 still resolve to
+   genuine instances instead of faux-bold, which was the real defect. Widen to
+   `100 900` only alongside a deliberate pass over those 238 elements. */
+@font-face {
+  font-family: 'AlbertSans';
+  src: url('/src/assets/fonts/AlbertSans-Variable.woff2') format('woff2');
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Obviously is a 66-glyph DEMO cut: A-Z, a-z, 0-9, comma, period, space and
+   nothing else. Any heading containing & ' - / ? + % or an em dash falls back
+   for that one character mid-word. `Obviously Fallback` below makes that
+   fallback deliberate instead of accidental. */
+@font-face {
+  font-family: 'Obviously';
+  src: url('/src/assets/fonts/ObviouslyDemo-Regular.woff2') format('woff2');
+  /* One static weight ships. Claiming the full range is deliberate: it stops
+     the browser from applying faux-bold to `font-bold`/`font-semibold`
+     headings, which at display sizes smears the outline and looks different on
+     every OS. Every weight therefore renders as the one real outline --
+     consistent everywhere, at the cost of `font-bold` being a no-op here. */
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Metric-matched fallback for the glyphs Obviously lacks. Same Albert Sans
+   file, scaled so its cap height matches Obviously's. Without it the ampersand
+   in "HVAC & Refrigeration" renders 4.2% short of the letters around it.
+
+   106.67% is 0.75em / 0.703125em, both measured from the RENDERED outlines
+   rather than the OS/2 table -- the table claims Albert's cap is 700/1000em but
+   the drawn glyph reaches 703.125, and using the table value overshoots. At
+   this scale the apostrophe matches Obviously's caps exactly and & ? % land
+   2.2% over, which is Albert's own designed cap overshoot and reads correctly.
+   Hyphens, dashes and + sit well below cap height in any font -- that is glyph
+   design, not a mismatch, so do not "correct" it.
+
+   Obviously's own ascent (1300) still governs the line box, so this scaled
+   fallback cannot change heading line height.
+
+   The single `font-weight: 500` is load-bearing, not a default. It pins the
+   variable wght axis so the fallback ignores whatever weight the element asks
+   for. That is correct because Obviously has ONE static outline that never
+   varies: a `font-extralight` hero like "HVAC & Refrigeration" leaves the
+   letters at Obviously's fixed weight, so a fallback tracking wght 200 drew an
+   ampersand less than half their stem thickness. Measured off the rasterised
+   outlines, Obviously's stem is 0.1025em and Albert at 500 (after size-adjust)
+   is 0.1067em -- the closest of any weight. Do not widen this to a range. */
+@font-face {
+  font-family: 'Obviously Fallback';
+  src: url('/src/assets/fonts/AlbertSans-Variable.woff2') format('woff2');
+  size-adjust: 106.67%;
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* The literal "Obviously Demo" display cut used in the Unit Converter hero.
+   A separate family from 'Obviously' so it always renders the demo face, never
+   a commercial 'Obviously' the visitor happens to have installed. */
+@font-face {
+  font-family: 'Obviously Demo';
+  src: url('/src/assets/fonts/ObviouslyDemo-Regular.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Font tokens. Every family is declared with a full fallback chain so text stays
+   readable if a file 404s, the network is blocked, or the user is offline before
+   the cache warms. Tailwind exposes these as font-albert / font-obviously. */
+@theme {
+  --font-albert: 'AlbertSans', 'Albert Sans', ui-sans-serif, system-ui,
+    -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
+    sans-serif;
+  /* 'Obviously Fallback' sits directly after each Obviously cut: it is the
+     cap-height-matched Albert Sans that supplies the ~8 punctuation characters
+     the demo font is missing. Plain 'AlbertSans' stays in the chain after it as
+     the unscaled safety net if the woff2 itself fails to load. */
+  --font-obviously: 'Obviously', 'Obviously Fallback', 'AlbertSans',
+    'Albert Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --font-obviously-demo: 'Obviously Demo', 'Obviously Fallback', 'AlbertSans',
+    'Albert Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  /* Makes the default font-sans utility and all unstyled text land on the
+     brand face rather than the stock Tailwind stack. */
+  --font-sans: var(--font-albert);
+}
+
+body {
+  font-family: var(--font-albert);
+}
+
+/* ---------------------------------------------------------------
+   Typography system
+   H1 32px Obviously  ·  P1 17px AlbertSans  ·  Eyebrow 13px AlbertSans
+   H2 28px Obviously  ·  P2 16px AlbertSans  ·  Eyebrow 12px AlbertSans
+   B2 16px AlbertSans
+   Headings step down on small screens; desktop sizes match the spec.
+   These sit in the components layer, so a deliberate inline Tailwind
+   utility on a given element still overrides them.
+--------------------------------------------------------------- */
+@layer components {
+  .h1 {
+    font-family: var(--font-obviously);
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .h2 {
+    font-family: var(--font-obviously);
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  .h3 {
+    font-family: var(--font-obviously);
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+
+  @media (min-width: 768px) {
+    .h1 { font-size: 32px; }
+    .h2 { font-size: 28px; }
+    .h3 { font-size: 24px; }
+  }
+
+  .p1 {
+    font-family: var(--font-albert);
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  .p2 {
+    font-family: var(--font-albert);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  .p3 {
+    font-family: var(--font-albert);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  .eyebrow-1 {
+    font-family: var(--font-albert);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .eyebrow-2 {
+    font-family: var(--font-albert);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  .b2 {
+    font-family: var(--font-albert);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1;
+  }
+}
+
+@theme {
+  @keyframes infinite-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  --animate-infinite-scroll: infinite-scroll 10s linear infinite;
+}
+
+/* Production touch: Pause animation on hover */
+.pause-on-hover:hover .animate-infinite-scroll {
+  animation-play-state: paused;
+}
+
+/* Accessibility: Stop animation for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-infinite-scroll {
+    animation-play-state: paused !important;
+  }
+}
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# No Disallow for /admin, deliberately.
+#
+# `Disallow` and `noindex` cancel each other out: a disallowed URL is never
+# fetched, so the crawler never reads the noindex telling it to stay out. It
+# can still index the URL itself from an external link — the "no information
+# is available for this page" result — which is the exact outcome the rule was
+# meant to prevent.
+#
+# /admin/* is kept out of the index by an `X-Robots-Tag: noindex, nofollow`
+# response header set in vercel.json. That reaches every crawler whether or
+# not it runs JS, unlike the <meta name="robots"> PageMeta.jsx renders, which
+# only exists once React has mounted. Letting crawlers fetch these URLs is
+# precisely what makes the header work.
+#
+# Not a security boundary either way — see ProtectedRoute.
+
+Sitemap: https://www.parasmanicopper.com/sitemap.xml

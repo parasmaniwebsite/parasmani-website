@@ -1,0 +1,22 @@
+{
+  "redirects": [
+    {
+      "source": "/hvac-refrigiration",
+      "destination": "/hvac-refrigeration",
+      "statusCode": 301
+    }
+  ],
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ],
+  "headers": [
+    {
+      "source": "/admin",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
+      "source": "/admin/:path*",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    }
+  ]
+}

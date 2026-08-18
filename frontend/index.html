@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./src//assets//favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Fonts are self-hosted and bundled (see src/index.css), so they work
+         offline, in regions where Google Fonts is blocked, and without a
+         third-party request. Outfit was loaded here but never used.
+
+         Preloaded because this is a Vite SPA: without these, the font URLs are
+         only discovered once the hashed CSS has downloaded and parsed, so the
+         first page of a session visibly flashes fallback text before swapping
+         to Obviously. Vite rewrites these hrefs to the hashed asset paths at
+         build time. `crossorigin` is required even same-origin -- fonts are
+         always fetched in CORS mode, and without it the browser downloads the
+         file twice and the preload is wasted. -->
+    <link
+      rel="preload"
+      href="/src/assets/fonts/AlbertSans-Variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/src/assets/fonts/ObviouslyDemo-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <title>Parasmani |  Tubes You Can Rely On - Premium Copper Tubes And Fittings </title>
+
+    <!-- Sitewide fallbacks. Per-route title/description/canonical/og are set by
+         src/components/PageMeta.jsx and only exist once JS has run, so these
+         are what non-rendering scrapers (WhatsApp, LinkedIn, Slack) see.
+
+         Deliberately NO canonical here: a static one would claim every URL is
+         the homepage for any crawler that doesn't run JS. PageMeta supplies the
+         correct per-route canonical instead.
+
+         Also deliberately no og:title/og:description — scrapers fall back to
+         <title> and the description below, which avoids duplicate OG tags once
+         PageMeta adds the per-route pair. -->
+    <!-- data-default marks this as the pre-JS fallback. React appends (rather
+         than prepends) hoisted <meta>, so without removing this one it would
+         sit first in the head and outrank every per-route description.
+         PageMeta.jsx strips it on mount. -->
+    <meta
+      data-default
+      name="description"
+      content="Parasmani Tubes Copper Pvt. Ltd. manufactures seamless copper tubes, pancake copper coils and copper fittings for HVAC, refrigeration, medical gas, plumbing and industrial use."
+    />
+    <meta property="og:site_name" content="Parasmani Copper" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:image" content="https://www.parasmanicopper.com/og-image.png" />
+    <meta property="og:image:width" content="1422" />
+    <meta property="og:image:height" content="841" />
+    <meta property="og:image:alt" content="Parasmani Tubes Copper Pvt. Ltd." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://www.parasmanicopper.com/og-image.png" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
