@@ -8,7 +8,6 @@ import testRoute from "./routes/testRoute.js";
 import contactRoute from "./routes/contactRoute.js";
 import blogRoute from "./routes/blogRoute.js";
 import categoryRoutes from "./routes/categoryRoute.js";
-import sitemapRoute from "./routes/sitemapRoute.js";
 
 const app = express();
 
@@ -61,7 +60,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/contact", contactRoute);
 
 app.use("/api/blog", blogRoute);
-app.use("/api/sitemap.xml", sitemapRoute);
 
 app.use("/api/category", categoryRoutes);
 
