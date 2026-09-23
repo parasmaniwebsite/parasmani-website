@@ -4,16 +4,32 @@ import path from "path";
 const API_URL = "https://api.parasmanicopper.com/api/blog";
 const SITE_URL = "https://www.parasmanicopper.com";
 
-function escapeXml(value) {
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;");
-}
-
 async function generateSitemap() {
+  const publicDir = path.join(process.cwd(), "public");
+
+  const staticSitemapPath = path.join(
+    publicDir,
+    "sitemap.static.xml"
+  );
+
+  const outputSitemapPath = path.join(
+    publicDir,
+    "sitemap.xml"
+  );
+
+  console.log("Reading static sitemap...");
+
+  if (!fs.existsSync(staticSitemapPath)) {
+    throw new Error(
+      `Static sitemap not found: ${staticSitemapPath}`
+    );
+  }
+
+  const staticSitemap = fs.readFileSync(
+    staticSitemapPath,
+    "utf8"
+  );
+
   console.log("Fetching blogs from:", API_URL);
 
   const response = await fetch(API_URL);
@@ -30,64 +46,71 @@ async function generateSitemap() {
     throw new Error("Unexpected blog API response.");
   }
 
-  const blogs = data.blogs;
+  const blogs = data.blogs.filter(
+    (blog) => blog.slug
+  );
 
   console.log(`Found ${blogs.length} blogs.`);
 
-  const staticUrls = [
-    `${SITE_URL}/`,
-    `${SITE_URL}/about-us`,
-    `${SITE_URL}/contact-us`,
-    `${SITE_URL}/blogs`,
-  ];
-
   const blogUrls = blogs
-    .filter((blog) => blog.slug)
     .map((blog) => {
-      const lastmod = blog.updatedAt || blog.createdAt;
+      const lastmod =
+        blog.updatedAt ||
+        blog.createdAt;
 
-      return {
-        loc: `${SITE_URL}/blog/${encodeURIComponent(blog.slug)}`,
-        lastmod: lastmod
-          ? new Date(lastmod).toISOString()
-          : new Date().toISOString(),
-      };
-    });
+      const lastmodDate = lastmod
+        ? new Date(lastmod).toISOString()
+        : new Date().toISOString();
 
-  const urls = [
-    ...staticUrls.map((loc) => ({
-      loc,
-      lastmod: new Date().toISOString(),
-    })),
-    ...blogUrls,
-  ];
+      return `  <url>
+    <loc>${SITE_URL}/blog/${escapeXml(blog.slug)}</loc>
+    <lastmod>${lastmodDate}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>`;
+    })
+    .join("\n");
 
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls
-  .map(
-    ({ loc, lastmod }) => `  <url>
-    <loc>${escapeXml(loc)}</loc>
-    <lastmod>${lastmod}</lastmod>
-  </url>`
-  )
-  .join("\n")}
-</urlset>
-`;
+  const closingTag = "</urlset>";
 
-  const outputPath = path.join(
-    process.cwd(),
-    "public",
-    "sitemap.xml"
+  if (!staticSitemap.includes(closingTag)) {
+    throw new Error(
+      "Static sitemap does not contain </urlset>."
+    );
+  }
+
+  const finalSitemap =
+    staticSitemap.replace(
+      closingTag,
+      `${blogUrls}\n\n${closingTag}`
+    );
+
+  fs.writeFileSync(
+    outputSitemapPath,
+    finalSitemap,
+    "utf8"
   );
 
-  fs.writeFileSync(outputPath, xml, "utf8");
+  console.log(
+    `Sitemap generated successfully: ${outputSitemapPath}`
+  );
 
-  console.log(`Sitemap generated: ${outputPath}`);
-  console.log(`Total URLs: ${urls.length}`);
+  console.log(
+    `Static sitemap preserved + ${blogs.length} blog URLs added.`
+  );
+}
+
+function escapeXml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
 }
 
 generateSitemap().catch((error) => {
-  console.error("Sitemap generation failed:", error);
+  console.error("Sitemap generation failed:");
+  console.error(error);
   process.exit(1);
 });
