@@ -59,15 +59,26 @@ const DimensionInputs = ({
           Outer Diameter (OD)
         </label>
         <div className="flex items-center gap-2">
+          {/* Plain text keyboard, not a numeric pad: inch sizes need space, "/" and "-". */}
           <input
-            type="number"
+            type="text"
+            inputMode="text"
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck={false}
             value={od}
             onChange={(e) => setOd(e.target.value)}
-            placeholder="e.g. 15.88"
+            placeholder={odUnit === 'in' ? 'e.g. 7/8 or 1-1/8' : 'e.g. 15.88'}
             className="flex-1 min-w-0 px-3 py-2 rounded-md border border-gray-200 text-[14px] text-gray-700 placeholder-[#B8B8B8] font-albert focus:outline-none focus:ring-1 focus:ring-orange-300 focus:border-[#C68344]"
           />
           <UnitToggle options={['mm', 'in']} value={odUnit} onChange={setOdUnit} />
         </div>
+        {odUnit === 'in' && (
+          <p className="mt-1 text-[11px] text-[#8A8A8A] font-albert">
+            Type 7/8 · 5/16 · 1 1/8 · 1-1/8 — or a decimal like 1.125
+          </p>
+        )}
       </div>
 
       {/* Wall Thickness Conditional Layout Box */}

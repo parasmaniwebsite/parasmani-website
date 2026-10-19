@@ -829,12 +829,12 @@ const CopperEstimator = () => {
 
 
     return (
-        <div className="min-h-screen bg-[#F5F4F1]">
+        <div className="min-h-screen bg-white">
             {/* ── HERO (matches other tools' banner responsiveness) ── */}
             {/* Mobile — stacked, image on top */}
             <div className="md:hidden">
                 <div className="relative h-[190px] w-full">
-                    <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#F5F4F1] via-[#F5F4F1]/10 to-transparent" />
+                    <div className="absolute inset-0 z-10 bg-gradient-to-t from-white via-white/10 to-transparent" />
                     <img src={heroImg} alt="" aria-hidden="true" className="h-full w-full object-cover object-center" />
                 </div>
                 <div className="px-5 pb-8 pt-5 text-center">
@@ -854,7 +854,7 @@ const CopperEstimator = () => {
                 className="relative hidden w-full items-center overflow-hidden md:flex md:h-[320px]"
                 style={{ backgroundImage: `url('${heroImg}')`, backgroundSize: "cover", backgroundPosition: "right center" }}
             >
-                <div className="absolute inset-0 bg-gradient-to-r from-[#f7f6f3] from-35% via-[#f7f6f3]/85 via-55% to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-white from-35% via-white/85 via-55% to-transparent" />
                 <div className="relative z-10 mx-auto w-full max-w-7xl px-6 md:px-12 lg:px-16">
                     <div className="max-w-xl text-left">
                         <span className="eyebrow-1 block font-albert uppercase tracking-[0.15em] text-[#C43A26]  mb-2">

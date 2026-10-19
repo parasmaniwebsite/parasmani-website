@@ -16,8 +16,48 @@ export const OD_MAX_MM = 150;
 export const WALL_MIN_MM = 0.315;
 export const WALL_MAX_MM = 3.251;
 
+const UNICODE_FRACTIONS = {
+  "¼": "1/4", "½": "1/2", "¾": "3/4",
+  "⅛": "1/8", "⅜": "3/8", "⅝": "5/8", "⅞": "7/8",
+  "⅙": "1/6", "⅚": "5/6", "⅓": "1/3", "⅔": "2/3",
+};
+
+// Reads a tube dimension the way the trade writes it. Inch ODs are quoted as
+// fractions, so this accepts "7/8", "5/16", "1 1/8" and "1-1/8" (the hyphen
+// joins whole and fraction — it is never a minus sign) alongside plain decimals
+// like "1.125". A trailing inch mark or "in" is ignored, and a phone keyboard's
+// "⅞"-style glyphs are expanded first. Returns 0 for anything unreadable or
+// negative, which every caller already treats as "no value".
+export const parseDimension = (value) => {
+  let s = String(value ?? "")
+    .trim()
+    .replace(/[¼½¾⅛⅜⅝⅞⅙⅚⅓⅔]/g, (ch) => ` ${UNICODE_FRACTIONS[ch]}`)
+    .replace(/,/g, ".")
+    .replace(/\s*(?:"|''|”|″|inches|inch|in)\s*$/i, "")
+    .trim();
+  if (!s) return 0;
+
+  const mixed = s.match(/^(\d+)\s*(?:-|\s)\s*(\d+)\s*\/\s*(\d+)$/);
+  if (mixed) {
+    const den = parseInt(mixed[3], 10);
+    return den ? parseInt(mixed[1], 10) + parseInt(mixed[2], 10) / den : 0;
+  }
+
+  const frac = s.match(/^(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)$/);
+  if (frac) {
+    const den = parseFloat(frac[2]);
+    return den ? parseFloat(frac[1]) / den : 0;
+  }
+
+  // Whole string must be a number, so "1 1/8" typed half-way ("1 1/") reads as
+  // nothing rather than silently as 1.
+  if (!/^\d*\.?\d+$|^\d+\.$/.test(s)) return 0;
+  const n = parseFloat(s);
+  return Number.isFinite(n) && n > 0 ? n : 0;
+};
+
 export const toMm = (value, unit) => {
-  const v = parseFloat(value);
+  const v = unit === 'SWG' ? parseFloat(value) : parseDimension(value);
   if (!v || Number.isNaN(v)) return 0;
   if (unit === 'in') return v * 25.4;
   if (unit === 'SWG') return SWG_TO_MM[Math.round(v)] || 0;

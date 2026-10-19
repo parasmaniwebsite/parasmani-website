@@ -81,11 +81,11 @@ const WhatsAppIcon = ({ className }) => (
 
 const ToolsPage = () => {
   return (
-    <div className="min-h-screen bg-[#F5F4F1] font-albert pb-16">
+    <div className="min-h-screen bg-white font-albert pb-16">
       {/* HERO — mobile (stacked, image on top, centered text) */}
-      <div className="md:hidden bg-[#F5F4F1]">
+      <div className="md:hidden bg-white">
         <div className="relative w-full h-[190px]">
-          <div className="absolute inset-0 bg-gradient-to-t from-[#F5F4F1] via-[#F5F4F1]/10 to-transparent z-10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/10 to-transparent z-10" />
           <img
             src={heroBg}
             alt=""
@@ -106,7 +106,7 @@ const ToolsPage = () => {
       </div>
 
       {/* HERO — desktop */}
-      <section className="relative hidden md:flex items-end overflow-hidden md:h-[320px] bg-[#F5F4F1] px-6 md:px-20 pt-20 pb-14">
+      <section className="relative hidden md:flex items-end overflow-hidden md:h-[320px] bg-white px-6 md:px-20 pt-20 pb-14">
         <img
           src={heroBg}
           alt=""
@@ -117,7 +117,7 @@ const ToolsPage = () => {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(to right, #F5F4F1 34%, rgba(245,244,241,0.6) 58%, rgba(245,244,241,0.05) 100%)",
+              "linear-gradient(to right, #FFFFFF 34%, rgba(255,255,255,0.6) 58%, rgba(255,255,255,0.05) 100%)",
           }}
         />
         <div className="relative z-10 max-w-[500px]">
@@ -159,8 +159,11 @@ const ToolsPage = () => {
               />
 
               {/* Resting label */}
-              <div className="absolute inset-x-0 bottom-0 px-5 pt-8 pb-[18px] bg-[linear-gradient(to_top,rgba(25,35,77,0.92)_55%,transparent)] transition-opacity duration-200 group-hover:opacity-0">
-                <div className="flex items-center gap-2.5 text-[0.92rem] font-bold text-white">
+              {/* Phones get a white strip behind the name: the narrower card
+                  puts the label over darker parts of some photos. Desktop
+                  shows the name straight on the photo. */}
+              <div className="absolute inset-x-0 bottom-0 px-5 py-3 bg-white/95 border-t border-[#c684454d] md:pt-8 md:pb-[18px] md:bg-transparent md:border-t-0 transition-opacity duration-200 group-hover:opacity-0">
+                <div className="flex items-center gap-2.5 text-[0.92rem] font-bold text-[#18234D]">
                   <span className="w-[30px] h-[30px] shrink-0 bg-[#c6844533] rounded-[7px] flex items-center justify-center">
                     <svg
                       viewBox="0 0 24 24"

@@ -13,7 +13,7 @@ const HeaderBanner = () => {
             {/* Mobile — stacked, image on top */}
             <div className="md:hidden">
                 <div className="relative w-full h-[190px]">
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#FBFAF8] via-[#FBFAF8]/10 to-transparent z-10" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-white via-white/10 to-transparent z-10" />
                     <img src={heroMobileImg} alt="" aria-hidden="true" className="w-full h-full object-cover object-center" />
                 </div>
                 <div className="px-5 pt-5 pb-8 text-center">

@@ -4,10 +4,13 @@ import UnitConverter from "./UnitConverter";
 
 const BLANK = "—";
 
-// PSI and kPa read as whole numbers with thousands separators; MPa keeps 2 dp,
-// otherwise a ~20 MPa working pressure would round away to a bare integer.
+const formatPsi = (mpa) => Math.round(mpa * MPA_TO.psi).toLocaleString();
+
+// PSI is the headline figure; these are the secondary units shown beneath it.
+// Bar keeps 1 dp as before, MPa 2 dp (a ~20 MPa pressure would otherwise round
+// to a bare integer), kPa a whole number with thousands separators.
 const UNIT_PILLS = [
-  { key: "psi", label: "PSI", format: (mpa) => Math.round(mpa * MPA_TO.psi).toLocaleString() },
+  { key: "bar", label: "Bar", format: (mpa) => (mpa * MPA_TO.bar).toFixed(1) },
   { key: "mpa", label: "MPa", format: (mpa) => mpa.toFixed(2) },
   { key: "kpa", label: "kPa", format: (mpa) => Math.round(mpa * MPA_TO.kpa).toLocaleString() },
 ];
@@ -30,8 +33,6 @@ const ResultPanel = ({ results }) => {
     isValid,
     workingPressureMpa,
     burstPressureMpa,
-    workingPressureBar,
-    burstPressureBar,
     safetyFactor,
     todRatio,
     uts,
@@ -43,10 +44,10 @@ const ResultPanel = ({ results }) => {
         <p className="text-[12px] sm:text-[14px] font-light tracking-wide text-[#646C88] mb-1 font-albert uppercase">
           Maximum Working Pressure
         </p>
-        <p className="font-obviously text-2xl sm:text-3xl font-medium text-[#272727] tracking-tight">
-          {isValid ? workingPressureBar.toFixed(1) : BLANK}{" "}
-          <span className="font-albert text-[18px] sm:text-[20px] font-medium text-[#272727]">
-            Bar
+        <p className="font-obviously text-3xl sm:text-4xl font-medium text-[#18234D] tracking-tight">
+          {isValid ? formatPsi(workingPressureMpa) : BLANK}{" "}
+          <span className="font-albert text-[18px] sm:text-[20px] font-medium text-[#18234D]">
+            PSI
           </span>
         </p>
         <PressureUnitPills valueInMpa={workingPressureMpa} isValid={isValid} />
@@ -57,9 +58,9 @@ const ResultPanel = ({ results }) => {
           Bursting Pressure
         </p>
         <p className="font-obviously text-2xl sm:text-3xl font-medium text-[#272727] tracking-tight">
-          {isValid ? burstPressureBar.toFixed(1) : BLANK}{" "}
+          {isValid ? formatPsi(burstPressureMpa) : BLANK}{" "}
           <span className="font-albert text-[18px] sm:text-[20px] font-medium text-[#272727]">
-            Bar
+            PSI
           </span>
         </p>
         <PressureUnitPills valueInMpa={burstPressureMpa} isValid={isValid} />
