@@ -25,6 +25,8 @@ import projectApprovalsPdf from "../assets/downloads/Approvals/Parasmani_Project
 import govtApprovalsPdf from "../assets/downloads/Approvals/Parasmani_Government_Approvals.pdf";
 import supplierCodePdf from "../assets/downloads/Policies/Parasmani-Supplier-Code-of-Conduct.pdf";
 import qualityPolicyPdf from "../assets/downloads/Policies/Parasmani-Quality-Policy.pdf";
+import isoCertificationsPdf from "../assets/downloads/Certifications/Parasmani-ISO-Certifications.pdf";
+import installationGuidelinesPdf from "../assets/downloads/Technical-Handbooks/Parasmani-Installation-Guidelines.pdf";
 
 const DownloadPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -119,7 +121,11 @@ const DownloadPage = () => {
         {
             category: "Technical Handbooks",
             items: [
-                { title: "Parasmani-Installation-Guidelines" },
+                {
+                    title: "Parasmani-Installation-Guidelines",
+                    file: installationGuidelinesPdf,
+                    filename: "Parasmani-Installation-Guidelines.pdf",
+                },
             ],
         },
         {
@@ -170,14 +176,13 @@ const DownloadPage = () => {
         {
             category: "Certifications",
             items: [
-                { title: "Parasmani-ISO-Certifications" },
-                { title: "Parasmani-Llyods-Register-Certificate" },
-                { title: "Parasmani-CE-Compliance" },
-                { title: "Parasmani-Green-Pro-Compliance" },
+                {
+                    title: "Parasmani-ISO-Certifications",
+                    file: isoCertificationsPdf,
+                    filename: "Parasmani-ISO-Certifications.pdf",
+                },
                 { title: "Parasmani-RoHS-Compliance" },
-                { title: "Parasmani-Directive-2007-47-EEC" },
-                { title: "Parasmani-Directive-EU-2002-95-EC" },
-                { title: "Parasmani-Directive-EU-2002-95-EC" },
+                { title: "Parasmani-CE-Compliance" },
             ],
         },
         {
