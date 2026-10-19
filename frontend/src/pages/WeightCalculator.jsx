@@ -6,7 +6,7 @@ import pdfLogo from "../assets/products/sct/availableBrandNew1.png"; // Imported
 import { FaWhatsapp } from "react-icons/fa";
 import { FiMessageSquare } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import { SWG_TO_MM } from "./utils/unitConversion";
+import { SWG_TO_MM, parseDimension } from "./utils/unitConversion";
 
 // ─── Global button styles injected once ──────────────────────────────────────
 const BTN_STYLES = `
@@ -135,18 +135,6 @@ function fmtUp(n) {
 function parseSafe(v) {
     const n = parseFloat(v);
     return isNaN(n) ? 0 : n;
-}
-
-// Inch diameters are quoted as fractions in the trade — accept "1/2", "3/8",
-// "1-3/8" and "1 3/8" alongside plain decimals.
-function parseDimension(str) {
-    const s = String(str ?? "").trim();
-    if (!s) return 0;
-    const mixed = s.match(/^(\d+(?:\.\d+)?)\s*[-\s]\s*(\d+)\s*\/\s*(\d+)$/);
-    if (mixed) return parseFloat(mixed[1]) + parseInt(mixed[2], 10) / parseInt(mixed[3], 10);
-    const frac = s.match(/^(\d+(?:\.\d+)?)\s*\/\s*(\d+)$/);
-    if (frac) return parseFloat(frac[1]) / parseInt(frac[2], 10);
-    return parseSafe(s);
 }
 
 function UnitToggle({ options, value, onChange }) {
@@ -447,18 +435,22 @@ export default function CopperTubeWeightCalculator() {
                                     <label style={{ fontSize: 13, fontWeight: 400, color: "#272727", textTransform: "uppercase" }}>Outer Diameter (OD)</label>
                                     <UnitToggle options={["mm", "in"]} value={odUnit} onChange={handleOdUnitChange} />
                                 </div>
+                                {/* Plain text keyboard, not a numeric pad: inch sizes need space, "/" and "-". */}
                                 <input
-                                    type={odUnit === "in" ? "text" : "number"}
-                                    inputMode="decimal"
-                                    min="0"
+                                    type="text"
+                                    inputMode="text"
+                                    autoComplete="off"
+                                    autoCorrect="off"
+                                    autoCapitalize="off"
+                                    spellCheck={false}
                                     value={odDisplay}
                                     onChange={(e) => setOdDisplay(e.target.value)}
-                                    placeholder={odUnit === "in" ? "e.g. 1/2  or  1-3/8" : "e.g. 15.88"}
+                                    placeholder={odUnit === "in" ? "e.g. 7/8  or  1-1/8" : "e.g. 15.88"}
                                     className="w-full h-[38px] border border-slate-300 rounded-md px-3 text-sm focus:border-[#1b255d] outline-none text-slate-900"
                                 />
                                 {odUnit === "in" && (
                                     <p style={{ fontSize: 11, color: "#64748b", margin: "4px 0 0 0" }}>
-                                        Fractions: 1/2 · 3/4 · 1-1/8 · 1-3/8 — or plain decimal
+                                        Type 7/8 · 5/16 · 1 1/8 · 1-1/8 — or a decimal like 1.125
                                     </p>
                                 )}
                             </div>
@@ -535,7 +527,12 @@ export default function CopperTubeWeightCalculator() {
                         </div>
 
                         <div className="flex flex-wrap gap-3 mb-6">
-                            <ResultCard label="Weight / Meter" value={fmt(weightPerMeter, 3)} unit="kg/m" />
+                            {/* Unit-rate follows the length unit the visitor chose. */}
+                            {lengthUnit === "ft" ? (
+                                <ResultCard label="Weight / Foot" value={fmtUp(weightPerMeter * FT_TO_M)} unit="kg/ft" />
+                            ) : (
+                                <ResultCard label="Weight / Meter" value={fmt(weightPerMeter, 3)} unit="kg/m" />
+                            )}
                             <ResultCard label="Inner Diameter" value={fmt(id_mm, 2)} unit="mm" />
                             <ResultCard label="Weight / Piece" value={fmtUp(weightPerMeter * length_m)} unit="kg" />
                             <ResultCard label="Total Weight" value={fmtUp(totalWeight)} unit="kg" accent />

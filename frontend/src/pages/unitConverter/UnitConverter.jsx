@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { SWG_TO_MM, parseDimension } from "../utils/unitConversion";
 
 // ─── Reference data ──────────────────────────────────────────────────────────
 // Standard ACR copper tube OD sizes: [inch label, mm]
@@ -19,11 +20,11 @@ const OD_INCH_OPTIONS = [
   "2-1/8", "2-5/8", "3-1/8", "3-5/8", "4-1/8", "5-1/8",
 ];
 
-// Wall thickness SWG gauges: [mm, gauge]
-const SWG = [
-  [1.016, 19], [0.914, 20], [0.813, 21], [0.711, 22],
-  [0.61, 23], [0.559, 24], [0.508, 25],
-];
+// Wall thickness SWG gauges: [mm, gauge]. Built from the same table the
+// Weight Calculator uses (SWG 4–30), so the two tools can never disagree.
+const SWG = Object.entries(SWG_TO_MM).map(([gauge, mm]) => [mm, Number(gauge)]);
+const SWG_MIN_MM = Math.min(...SWG.map(([mm]) => mm));
+const SWG_MAX_MM = Math.max(...SWG.map(([mm]) => mm));
 
 // ─── Shared style tokens (match Pressure/Weight calculator UI) ───────────────
 const INPUT =
@@ -197,8 +198,8 @@ const UnitConverter = () => {
   }, [odInch]);
 
   const odMmOut = useMemo(() => {
-    const v = parseFloat(odMmIn);
-    if (isNaN(v) || v <= 0) return null;
+    const v = parseDimension(odMmIn);
+    if (v <= 0) return null;
     const best = OD_TABLE.reduce((a, b) =>
       Math.abs(b[1] - v) < Math.abs(a[1] - v) ? b : a
     );
@@ -212,7 +213,9 @@ const UnitConverter = () => {
     const best = SWG.reduce((a, b) =>
       Math.abs(b[0] - v) < Math.abs(a[0] - v) ? b : a
     );
-    return `SWG ${best[1]}  (${best[0]} mm)`;
+    const diff = parseFloat(Math.abs(best[0] - v).toFixed(3));
+    const outside = v < SWG_MIN_MM || v > SWG_MAX_MM ? " · outside SWG 4–30 range" : "";
+    return `SWG ${best[1]}  (${best[0].toFixed(3)} mm${diff > 0 ? " · ±" + diff : ""}${outside})`;
   }, [mmSwgIn]);
 
   return (
@@ -316,7 +319,7 @@ const UnitConverter = () => {
 
             <div>
               <Hint>OD — enter mm → nearest standard inch</Hint>
-              <Field placeholder="e.g. 15.88" step="0.01" value={odMmIn} tag="mm" onChange={(e) => setOdMmIn(e.target.value)} />
+              <Field type="text" inputMode="text" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} placeholder="e.g. 15.88" value={odMmIn} tag="mm" onChange={(e) => setOdMmIn(e.target.value)} />
               <div className="mt-3">
                 <OutputBox>{odMmOut}</OutputBox>
               </div>
@@ -327,7 +330,7 @@ const UnitConverter = () => {
               <select value={swgSel} onChange={(e) => setSwgSel(e.target.value)} className={`${INPUT} appearance-none cursor-pointer`} style={SELECT_STYLE}>
                 <option value="">Select SWG gauge</option>
                 {SWG.map(([mm, g]) => (
-                  <option key={g} value={mm}>{`SWG ${g} — ${mm} mm`}</option>
+                  <option key={g} value={mm.toFixed(3)}>{`SWG ${g} — ${mm.toFixed(3)} mm`}</option>
                 ))}
               </select>
               <div className="mt-3">
