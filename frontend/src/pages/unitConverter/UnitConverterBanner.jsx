@@ -11,7 +11,7 @@ const UnitConverterBanner = () => {
             {/* Mobile — stacked, image on top */}
             <div className="md:hidden">
                 <div className="relative w-full h-[190px]">
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#FBFAF8] via-[#FBFAF8]/10 to-transparent z-10" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-white via-white/10 to-transparent z-10" />
                     <img src={heroBg} alt="" aria-hidden="true" className="w-full h-full object-cover object-center" />
                 </div>
                 <div className="px-5 pt-5 pb-8 text-center">
@@ -41,7 +41,7 @@ const UnitConverterBanner = () => {
                     className="absolute inset-0"
                     style={{
                         background:
-                            "linear-gradient(to right, rgba(245,244,241,0.96) 30%, rgba(245,244,241,0.6) 55%, transparent 85%)",
+                            "linear-gradient(to right, rgba(255,255,255,0.96) 30%, rgba(255,255,255,0.6) 55%, transparent 85%)",
                     }}
                 />
 

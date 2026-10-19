@@ -3,7 +3,7 @@ import UnitConverter from "./unitConverter/UnitConverter";
 
 const UnitConverterPage = () => {
   return (
-    <div className="min-h-screen bg-[#FBFAF8]">
+    <div className="min-h-screen bg-white">
       <UnitConverterBanner />
 
       <div className="w-full bg-white py-16 md:py-20">
