@@ -8,6 +8,7 @@ import copperFittings from "../assets/homePage/copper-fittings.png";
 import copperFittings2 from "../assets/homePage/CF-BLUE-Photoroom.png";
 import copperCoil2 from "../assets/homePage/PC-BLUE-Photoroom.png";
 import { useNavigate } from "react-router-dom";
+import AskAISection from "./AskAISection";
 
 const ProductsSection = () => {
   const nav = useNavigate();
@@ -179,6 +180,8 @@ const ProductsSection = () => {
           Copper tubes, coils and fittings built for the applications that
           matter.
         </p>
+
+        <AskAISection />
 
         {/* CTA Section */}
         <div className="mx-[calc(50%-50vw)] mt-[90px] bg-[#17234F] px-6 py-[70px] md:py-[100px]">
