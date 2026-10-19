@@ -1,7 +1,7 @@
 # Parasmani Website — Project Notes
 
 Plain-language guide to how this website is put together. Written for someone who does not code.
-Last reviewed: 19 Oct 2026.
+Last reviewed: 19 Oct 2026 (updated the same day with the changes listed in section 8).
 
 ---
 
@@ -79,6 +79,12 @@ Old misspelled address `/hvac-refrigiration` automatically forwards to `/hvac-re
 | `/project-estimator` and `/copper-estimator` (same page) | Project / copper estimator — also sends a lead to the admin panel | `pages/CopperEstimator.jsx` |
 | `/unit-converter` | Unit converter | `pages/UnitConverterPage.jsx` (parts in `pages/unitConverter/`) |
 
+How the tools read sizes and show results:
+- **OD boxes** (weight, pressure, unit converter) use a normal text keyboard on phones and accept inch sizes the way the trade writes them: `7/8`, `5/16`, `1 1/8`, `1-1/8` (= 1 and 1/8, not a minus) and decimals like `1.125`. One shared reader does this for every tool: `parseDimension()` in `pages/utils/unitConversion.js`.
+- **SWG sizes** (4 to 30) come from one shared table, `SWG_TO_MM` in the same file. The Weight Calculator, Pressure Calculator and Unit Converter all use it, so they always agree. Change a value there and every tool follows.
+- **Weight Calculator** shows Weight / Meter when length is in metres and Weight / Foot when it is in feet.
+- **Pressure Calculator** shows PSI as the big number, with Bar, MPa and kPa smaller below it (`pages/pressureCalculator/ResultPanel.jsx`).
+
 ### Legal & other
 
 | Web address | Page | File |
@@ -98,6 +104,7 @@ These live in `frontend/src/components/` and appear on many pages:
 | `WhatsAppFloat.jsx` | Floating WhatsApp button |
 | `EnquiryForm.jsx` / `EnquiryModal.jsx` | The enquiry form and its pop-up version |
 | `Hero.jsx`, `ProductsSection.jsx`, `BrandsServed.jsx`, `InsightsSection.jsx`, etc. | Sections of the Home page (`InsightsSection` shows latest blogs) |
+| `AskAISection.jsx` | Home page "Ask AI" strip with 3 buttons (Google AI, ChatGPT, Perplexity). Placed inside `ProductsSection.jsx`, between "Our Products" and the navy "Calculate Before You Order" band, because both live in that one file |
 | `PageMeta.jsx` | Sets each page's Google title/description (text comes from `frontend/src/seo/pageMeta.js`) |
 
 **Tip:** large pages = one main file + a folder of the same name holding its sections. To change, say, the FAQ on the Medical Gas page, look in `pages/industries/medicalGas/` (FAQ text is in `faqData.js`).
@@ -231,7 +238,13 @@ These are part of the code. To change one, replace the file and redeploy.
 | `Spec-Sheets/` | Technical data sheets (HVAC-R tubes, PTP K-Series, MGPS tubes) |
 | `deal-reference/` | Weight charts, packaging specifications |
 | `Approvals/` | OEM/vendor, project, government approvals |
+| `Certifications/` | ISO certificate |
+| `Technical-Handbooks/` | Installation guidelines |
 | `Policies/` | Quality policy, supplier code of conduct |
+
+Download icons: **copper** = file attached and downloadable; **grey** = no PDF yet ("available on request"). Rows still grey: HVAC-R Submittal, RoHS, CE. Attach a PDF to a row and its icon turns copper by itself. A section shows a "Download All" button by itself once it has 2 or more files.
+
+The Certifications section lists only ISO, RoHS and CE.
 
 **To add/replace a PDF:** put the file in the right sub-folder, then list it in `pages/DownloadPage.jsx` (top of file has one line per PDF, and the list below gives its title and download name). Replacing a file with the *exact same name* needs no code change — just redeploy.
 
@@ -251,10 +264,14 @@ Blog posts (title, summary, content, category, order), blog categories, enquirie
 
 ## 6. How a change goes live
 
-1. Code is changed and pushed to GitHub (`main` branch).
-2. **Vercel** rebuilds the frontend automatically → new pages/images/PDFs live in a few minutes. Build also regenerates the sitemap from live blogs.
-3. **Render** rebuilds the backend automatically (if auto-deploy is on).
-4. Blogs and enquiries do **not** need a redeploy — they change instantly via the admin panel.
+1. Code is changed on a separate branch and pushed to GitHub.
+2. Vercel builds a **test copy (preview)** of the branch. The link appears on the GitHub pull request; it needs a Vercel login. Check it on desktop and phone.
+3. Open a pull request on GitHub and click **Merge** to put the change into `main`.
+4. **Vercel** rebuilds the live website from `main` automatically → new pages/images/PDFs live in a few minutes. Build also regenerates the sitemap from live blogs.
+5. **Render** rebuilds the backend automatically (if auto-deploy is on).
+6. Blogs and enquiries do **not** need a redeploy — they change instantly via the admin panel.
+
+Note: Vercel has **two projects** connected to this GitHub code. `parasmani-website` is the website. `parasmani-website-5gcw` (Express icon) is very likely a spare copy of the backend; the real backend runs on Render. It builds on every push but is harmless. Check its Root Directory in Vercel settings before deleting it.
 
 ---
 
@@ -264,4 +281,38 @@ Blog posts (title, summary, content, category, order), blog categories, enquirie
 - Blog edit form can upload an "author image", but the blog database shape (`backend/src/models/Blog.js`) has no author-image field, so it is silently not saved.
 - Root folder has many older guide files (`README.md`, `QUICKSTART.md`, `SETUP.md`, `FIXES.md`, `COMPLETION_SUMMARY.md`, etc.) that may be out of date. This file and `frontend/CLAUDE.md` are the most current.
 - `backend/src/uploads/` contains leftover test images (WhatsApp photo, QR code) that can probably be removed.
+- The enquiry form's name and email checks are written in a way newer browsers reject, so the browser skips those checks (the form still submits). Seen in the browser console on the contact page; the file is `components/EnquiryForm.jsx`.
+- Privacy Policy, Terms of Service and the 404 page still use an off-white background (`#FBFAF8`); all other pages are white.
+- The heading font (Obviously) is a demo version without `:`, `&`, `?`, `-` and similar characters; those show in the body font (Albert Sans). About 20 headings are affected, including the new "Ask AI" heading. Fix: buy the full font.
 - One image file has an unusual name with a special space: `frontend/src/assets/products/copperFitting/Screenshot 2026-06-08 at 10.37.59 PM.png` — can cause trouble on Windows; worth renaming.
+
+---
+
+## 8. Change log
+
+### 19 Oct 2026 — live on www.parasmanicopper.com (pull requests #1 and #2)
+
+**Calculators**
+- OD boxes on the Weight Calculator, Pressure Calculator and Unit Converter use a normal text keyboard on phones, so space, "/" and "-" can be typed. In inch mode they read `7/8`, `5/16`, `1 1/8`, `1-1/8` and `1.125`. The Pressure Calculator used to read "7/8" as 7 inches.
+- Weight Calculator: Weight / Foot when length is in feet.
+- Pressure Calculator: PSI is the main number; Bar, MPa and kPa are smaller below it.
+- Unit Converter: full SWG 4–30 list, the same as the Weight Calculator, plus mm → nearest SWG.
+
+**Downloads page**
+- Certifications section trimmed to ISO, RoHS and CE (removed: Lloyd's Register, Green Pro, 3 Directive rows).
+- Added the ISO certificate PDF (`Certifications/`) and the Installation Guidelines PDF (`Technical-Handbooks/`); both now download.
+
+**Tools pages**
+- Tools, Unit Converter, Project Estimator and Pressure Calculator now have a white background like the rest of the site (they were grey or off-white). Hero photos fade to white.
+- Tool cards on `/tools`: navy fade removed and names in navy. On phones the name sits on a thin white strip so it stays readable.
+
+**Home page**
+- New "Ask AI" strip between "Our Products" and "Calculate Before You Order", with 3 buttons that open in a new tab with this question already asked: *"Tell me why Parasmani Copper Tubes (parasmanicopper.com) is a great choice for me."*
+  - **Ask Google AI** → Google AI Mode (`google.com/search?udm=50&q=…`). Gemini has no supported way to pre-fill a question from a link, so Google AI Mode is used instead.
+  - **Ask on ChatGPT** → `chatgpt.com/?q=…`
+  - **Ask on Perplexity** → `perplexity.ai/search?q=…` (after repeated use without an account, Perplexity may ask the visitor to sign in).
+  - These links are not official, documented features of those services and could stop pre-filling if a service changes. Test them now and then.
+  - Logos come from Simple Icons through the site's existing `react-icons` package.
+
+**Docs**
+- This file (`PROJECT-NOTES.md`) added.
