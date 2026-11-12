@@ -1,6 +1,6 @@
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import WhatsAppFloat from "./components/WhatsAppFloat.jsx";
+import AskParasmani from "./components/askParasmani/AskParasmani.jsx";
 
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
@@ -183,7 +183,10 @@ const App = () => {
       </Routes>
 
       {!isAdminRoute && <Footer />}
-      {!isAdminRoute && <WhatsAppFloat />}
+      {/* Ask Parasmani replaces the floating WhatsApp button; WhatsApp sits
+          inside its panel. WhatsAppFloat.jsx stays because Contact imports
+          WHATSAPP_URL from it. */}
+      {!isAdminRoute && <AskParasmani />}
     </div>
   );
 };

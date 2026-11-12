@@ -221,14 +221,16 @@ const COUNTRY_CODES = [
  * Shared enquiry form — used inline on the Contact page and inside EnquiryModal.
  * Posts to /api/contact, which is what the admin Contacts table reads.
  * `onSuccess` lets the modal close itself once the enquiry goes through.
+ * `initialMessage` prefills the message box (Ask Parasmani's "Request a Quote"
+ * passes the visitor's question); it is cut to the field's 300-char limit.
  */
-const EnquiryForm = ({ onSuccess, autoFocus = false }) => {
+const EnquiryForm = ({ onSuccess, autoFocus = false, initialMessage = "" }) => {
   const [formData, setFormData] = useState({
     fullName: "",
     countryCode: "91", // Assigned initial state value matching your default
     contactNumber: "",
     email: "",
-    message: "",
+    message: initialMessage.slice(0, 300),
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");

@@ -8,6 +8,7 @@ import testRoute from "./routes/testRoute.js";
 import contactRoute from "./routes/contactRoute.js";
 import blogRoute from "./routes/blogRoute.js";
 import categoryRoutes from "./routes/categoryRoute.js";
+import askRoute from "./routes/askRoute.js";
 
 const app = express();
 
@@ -32,6 +33,12 @@ app.get("/health", (req, res) => {
         status: "ok",
     })
 })
+
+/**
+ * Ask Parasmani is mounted before the database gate below on purpose: it must
+ * keep answering when MongoDB is down. Its logging is best-effort.
+ */
+app.use("/api/ask", askRoute);
 
 /**
  * Every /api route needs the database, so the connection is established here

@@ -41,6 +41,23 @@ export const resetPasswordLimiter = rateLimit({
   handler: tooMany("Too many reset attempts. Please try again later."),
 });
 
+// Ask Parasmani: every question can cost an API call. A short-window cap stops
+// a script hammering the endpoint; a daily cap bounds what one address can
+// spend. Generous enough that a real visitor never sees them.
+export const askBurstLimiter = rateLimit({
+  ...baseOptions,
+  windowMs: 10 * 60 * 1000,
+  limit: Number.parseInt(process.env.ASK_LIMIT_10MIN ?? "", 10) || 20,
+  handler: tooMany("You've asked a lot of questions in a short time. Please wait a few minutes, or contact our sales team directly."),
+});
+
+export const askDailyLimiter = rateLimit({
+  ...baseOptions,
+  windowMs: 24 * 60 * 60 * 1000,
+  limit: Number.parseInt(process.env.ASK_LIMIT_DAY ?? "", 10) || 100,
+  handler: tooMany("You've reached today's question limit. Our sales team can help you directly."),
+});
+
 // Login had no brute-force ceiling at all; failed sign-ins are what matter, so
 // successful ones are not counted against the limit.
 export const loginLimiter = rateLimit({

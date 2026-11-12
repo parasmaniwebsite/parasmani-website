@@ -41,4 +41,6 @@ You ask a real question and get **one short, exact answer with its source** ("Fr
 3. **One launcher, not two.** WhatsApp already floats bottom-right. A second bubble stacked on it is clutter. Proposal: a single "Ask Parasmani" pill there, with WhatsApp moved inside the panel as a permanent button. Alternatively, keep both, stacked.
 4. **Escalation buttons come from the server, not the model's wording.** The model returns `{answer, entry_ids, escalate}`. Safety-critical topics are forced to `escalate: true` in code, so the buttons can't be talked away by a cleverly phrased prompt.
 
-Open questions: Is the WhatsApp sales number `+91 98191 34044` (from `WhatsAppFloat.jsx`) correct for this? Should "Request a Quote" open the existing Enquiry modal with the question prefilled?
+Decided (13 Nov 2026):
+- **WhatsApp Sales** in the bot uses **+91 81698 08254** (`wa.me/918169808254`), not the site's floating-button number +91 98191 34044. The existing floating button stays as it is.
+- **Request a Quote** opens the existing `EnquiryModal` / `EnquiryForm`, with the customer's question prefilled. This needs one small optional prop on the form (initial message); no visual change. The form's message field allows 10–300 characters, so long questions are trimmed to fit.

@@ -95,7 +95,8 @@ These live in `frontend/src/components/` and appear on many pages:
 |---|---|
 | `Navbar.jsx` | Top menu bar |
 | `Footer.jsx` | Bottom footer |
-| `WhatsAppFloat.jsx` | Floating WhatsApp button |
+| `askParasmani/AskParasmani.jsx` | Floating "Ask Parasmani" assistant (bottom-right on every page; WhatsApp is inside its panel). Guide: `ASK_PARASMANI.md` |
+| `WhatsAppFloat.jsx` | Old floating WhatsApp button, no longer shown. Kept because the Contact page reads its WhatsApp link |
 | `EnquiryForm.jsx` / `EnquiryModal.jsx` | The enquiry form and its pop-up version |
 | `Hero.jsx`, `ProductsSection.jsx`, `BrandsServed.jsx`, `InsightsSection.jsx`, etc. | Sections of the Home page (`InsightsSection` shows latest blogs) |
 | `PageMeta.jsx` | Sets each page's Google title/description (text comes from `frontend/src/seo/pageMeta.js`) |

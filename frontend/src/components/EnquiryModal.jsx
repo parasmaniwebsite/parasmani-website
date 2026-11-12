@@ -7,7 +7,7 @@ import EnquiryForm from "./EnquiryForm";
  * Wraps the same EnquiryForm the Contact page renders inline, so both paths
  * share one validation flow and one POST /api/contact call.
  */
-const EnquiryModal = ({ open, onClose }) => {
+const EnquiryModal = ({ open, onClose, initialMessage = "" }) => {
   const panelRef = useRef(null);
   const closeRef = useRef(null);
 
@@ -96,7 +96,11 @@ const EnquiryModal = ({ open, onClose }) => {
           Fill in the form and our team will respond within 24 hours.
         </p>
 
-        <EnquiryForm autoFocus onSuccess={() => setTimeout(onClose, 2500)} />
+        <EnquiryForm
+          autoFocus
+          initialMessage={initialMessage}
+          onSuccess={() => setTimeout(onClose, 2500)}
+        />
       </div>
     </div>
   );
