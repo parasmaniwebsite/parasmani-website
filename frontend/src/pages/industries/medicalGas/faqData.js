@@ -10,13 +10,13 @@
 export const FAQ_DATA = [
   {
     id: "faq-1",
-    question: "Why must medical gas tubes be Half Hard and not Hard?",
-    answer: "BS EN 13348 mandates Half Hard (R250) for medical gas copper tubes for three reasons: Hard drawn tubes develop micro-fractures under the continuous pressure cycling of gas supply systems. Hard tubes cannot absorb the vibration and hammering effect from gas flow — leading to joint failure over time. And hard copper cannot flex to accommodate thermal expansion from seasonal temperature changes and daily O₂ on/off cycles. Half Hard provides ductility while retaining the pressure rating required for MGPS."
+    question: "Why is Half Hard the standard temper for medical gas tubes?",
+    answer: "Half Hard (R250) is the temper recommended under BS EN 13348 for medical gas pipelines and is therefore Parasmani's standard supply. It resists long-term stress cracking, absorbs vibration and hammering rather than transmitting it to the joints, and accommodates thermal and seismic movement — where hard drawn R290 is less tolerant. Hard (R290) MGPS tubes are also available on request."
   },
   {
     id: "faq-2",
     question: "What brazing rod should be used for medical gas copper joints?",
-    answer: "Per HTM 02-01 and BS EN 13348, medical gas copper joints must be brazed using a silver-based brazing alloy with a minimum 45% silver content (e.g. BAg-7 or equivalent). Standard phosphor-copper brazing rod (BCuP-2/BCuP-5) used in HVAC must not be used for medical gas — it contains phosphorus which is incompatible with the metallurgical requirements of medical grade joints. Nitrogen purging during brazing is mandatory. Without a continuous nitrogen purge through the tube during brazing, oxidation creates carbon scale on the internal bore. Carbon particulate inside an oxygen line is a direct fire and combustion risk — oxygen accelerates the ignition of carbon residue under pressure. Every Parasmani MGPS tube is supplied carbon-free from the factory; maintaining that standard on site requires nitrogen purge from start to finish of every brazed joint."
+    answer: "Braze with CP 104 copper-silver-phosphorus filler to BS EN ISO 17672 — no flux is required on copper-to-copper joints. Indicative minimum brazing temperature is 710 °C. Penetration must reach three times the wall thickness or 3 mm, whichever is greater. Nitrogen purging during brazing is mandatory. Without a continuous nitrogen purge through the tube during brazing, oxidation creates carbon scale on the internal bore. Carbon particulate inside an oxygen line is a direct fire and combustion risk — oxygen accelerates the ignition of carbon residue under pressure. Every Parasmani MGPS tube is supplied carbon-free from the factory; maintaining that standard on site requires nitrogen purge from start to finish of every brazed joint."
   },
   {
     id: "faq-3",

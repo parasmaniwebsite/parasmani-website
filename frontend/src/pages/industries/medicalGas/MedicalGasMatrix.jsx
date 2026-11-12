@@ -71,12 +71,12 @@ export default function MedicalGasMatrix() {
               Why Temper Matters In MGPS
             </span>
             <h2 className="h2 text-[#1C1C1C] leading-[1.15] tracking-tight">
-              <span className="text-[#C68344]">Half Hard</span> is not optional in medical gas.
+              <span className="text-[#C68344]">Half Hard</span> is our standard for medical gas.
             </h2>
           </div>
 
           <p className="p2 font-albert leading-relaxed font-light text-[#4A4A4A]">
-            For medical gas pipeline systems, temper is a safety requirement — not a choice. BS EN 13348 mandates Half Hard (R250), and Parasmani MGPS tubes are supplied only in this temper. Continuous pressure, vibration, and temperature cycles make hard drawn tubes a long-term failure risk in hospital gas systems.
+            Half Hard (R250) is the temper recommended under BS EN 13348 for medical gas pipelines and is therefore Parasmani's standard supply. It resists long-term stress cracking, absorbs vibration and hammering, and accommodates thermal and seismic movement. Hard (R290) is available on request.
           </p>
 
           <div className="space-y-6 pt-2">

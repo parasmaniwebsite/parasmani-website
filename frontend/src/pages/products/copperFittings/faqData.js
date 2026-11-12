@@ -22,7 +22,7 @@ a: "Our standard range is designed for silver brazing and soft soldering only. W
 },
 {
 q: "What brazing rod should I use with copper fittings?",
-a: "For most HVAC and refrigeration applications: BCuP-2 or BCuP-5 phosphor-copper brazing rod (no flux required on copper-to-copper joints). For medical gas (MGPS) systems, silver-based brazing alloy with a minimum 45% silver content is mandatory per BS EN 13348 and HTM 02-01. For potable water plumbing, use lead-free solder or silver braze per EN 1254. Always purge with nitrogen during brazing to prevent internal oxidation scale formation.",
+a: "For most HVAC and refrigeration applications: BCuP-2 or BCuP-5 phosphor-copper brazing rod (no flux required on copper-to-copper joints). For potable water plumbing, use lead-free solder or silver braze per EN 1254. Always purge with nitrogen during brazing to prevent internal oxidation scale formation.",
 },
 {
 q: "Do you supply non-standard sizes or custom fittings?",

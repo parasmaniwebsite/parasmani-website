@@ -100,7 +100,7 @@ const CertificatesAndApprovals = () => {
       id: 3,
       type: "BIS Certificate",
       title: "BUREAU OF INDIAN STANDARDS",
-      issuer: "CM/L - 7200083993",
+      issuer: "CM/L - 7100071995",
       imgUrl: BIScertificate,
       isAvailable: true,
     },

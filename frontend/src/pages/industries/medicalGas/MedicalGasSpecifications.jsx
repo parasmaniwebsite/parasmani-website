@@ -34,7 +34,7 @@ const MedicalGasSpecifications = () => {
     {
       label: "Temper",
       value: "250",
-      description: "Parasmani supplies Half Hard R250 for all medical gas pipeline applications."
+      description: "Half Hard R250 is Parasmani's standard supply for medical gas pipelines. Hard R290 on request."
     },
     {
       label: "Marked At Every Metre",
