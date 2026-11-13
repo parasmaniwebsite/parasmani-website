@@ -16,9 +16,12 @@ import { fileURLToPath } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
-// backend/src/ask -> repo root /knowledge. Overridable for hosts that deploy
-// the backend folder on its own.
-export const DEFAULT_KNOWLEDGE_DIR = path.resolve(here, "../../../knowledge");
+// Repo root /knowledge (Render, local dev). On Vercel the build copies it to
+// backend/knowledge (scripts/copyKnowledge.js), so prefer the repo copy when it
+// exists and fall back to the bundled copy. KNOWLEDGE_DIR overrides both.
+const REPO_KNOWLEDGE = path.resolve(here, "../../../knowledge");
+const BUNDLED_KNOWLEDGE = path.resolve(here, "../../knowledge");
+export const DEFAULT_KNOWLEDGE_DIR = fs.existsSync(REPO_KNOWLEDGE) ? REPO_KNOWLEDGE : BUNDLED_KNOWLEDGE;
 
 const ID_RE = /^KB-\d{2}-\d{2}$/;
 const STATUSES = new Set(["approved", "needs_verification", "unavailable"]);

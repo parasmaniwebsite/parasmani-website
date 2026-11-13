@@ -20,9 +20,19 @@ const app = express();
 const trustProxy = Number.parseInt(process.env.TRUST_PROXY ?? "", 10);
 app.set("trust proxy", Number.isNaN(trustProxy) ? false : trustProxy);
 
-app.use(cors( {
-    origin : ['http://localhost:5173', 'https://www.parasmanicopper.com', "https://parasmanicopper.com"]
-}));
+/**
+ * Live site + local dev, plus anything listed in ALLOWED_ORIGINS (comma
+ * separated). Set ALLOWED_ORIGINS only on the dev/preview backend, e.g. to the
+ * frontend's Vercel preview address, so production stays locked to the real
+ * domain.
+ */
+const allowedOrigins = [
+    'http://localhost:5173',
+    'https://www.parasmanicopper.com',
+    'https://parasmanicopper.com',
+    ...(process.env.ALLOWED_ORIGINS || '').split(',').map((o) => o.trim()).filter(Boolean),
+];
+app.use(cors({ origin: allowedOrigins }));
 
 // Bounded so an oversized body cannot be used to exhaust memory.
 app.use(express.json({ limit: "100kb" }));

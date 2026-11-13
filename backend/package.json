@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
+    "vercel-build": "node scripts/copyKnowledge.js",
     "test": "node --test test/",
     "ask:eval": "node test/ask-eval.js",
     "ask:export": "node scripts/exportAskLog.js"

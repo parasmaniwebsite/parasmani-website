@@ -3,3 +3,4 @@ node_modules
 # Ask Parasmani question-log exports
 ask-log.csv
 test/ask-eval-results.json
+knowledge/
