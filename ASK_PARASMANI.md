@@ -70,6 +70,30 @@ cd backend && npm run ask:eval
 
 The live eval asks **35 real questions**: 12 answerable, 8 not in the knowledge base, 7 safety-critical, and 8 off-topic, prompt-injection or "make it guess" attempts. It treats the launch list as approved without changing any file, prints PASS/FAIL per question, and saves `backend/test/ask-eval-results.json`. It needs `ANTHROPIC_API_KEY` and makes ~35 API calls.
 
+## Dev site on Vercel (test here before main)
+
+The `dev` branch deploys as a private preview on both Vercel projects. `main`, and therefore the live site, is unaffected.
+
+| | Vercel project |
+|---|---|
+| Website | `parasmani-website` |
+| API | `parasmani-website-5gcw` |
+
+**Get the two dev addresses first.** In each project open Deployments, click the latest deployment of branch `dev`, and copy the domain that contains `git-dev`. That domain always points at the newest `dev` build. Don't use the address with a random code (like `-nqe6okvez-`), because it changes on every push. Below, `<DEV_SITE>` and `<DEV_API>` mean those two addresses. For tidier names, add custom domains such as `dev.parasmanicopper.com` and `api-dev.parasmanicopper.com` under Settings → Domains and assign them to the `dev` branch.
+
+One-time setup in the Vercel dashboard:
+
+1. **API project `parasmani-website-5gcw`** → Settings → Environment Variables. For each variable choose environment **Preview** and branch **dev**:
+   - `ANTHROPIC_API_KEY` = your key
+   - `ALLOWED_ORIGINS` = `<DEV_SITE>` (with `https://`, no trailing slash)
+   - `TRUST_PROXY` = `1`
+   - Check that `MONGO_URI`, `JWT_SECRET` and the three `IMAGEKIT_*` variables are also enabled for Preview; the API won't start without the ImageKit ones. With the live `MONGO_URI`, quotes sent from the dev site land in your real admin panel. With a separate database, the dev site's blogs are empty.
+2. **API project** → Settings → Deployment Protection: let **preview** deployments be reached without a Vercel login. Otherwise the browser can't call the dev API. It is still rate-limited.
+3. **Website project `parasmani-website`** → Settings → Environment Variables → `VITE_BACKEND_URI` = `<DEV_API>` (origin only, no `/api`), environment **Preview**, branch **dev**. Leave this project's Deployment Protection on, so only people logged in to your Vercel team can open the dev site.
+4. Redeploy the latest `dev` deployment in both projects (Deployments → ⋯ → Redeploy) so the new variables apply.
+
+To try approvals safely: approve entries on the `dev` branch, push, test on the dev site, and merge to `main` only when you're happy.
+
 ## Deploy
 
 1. **Render (backend)**: Service → Environment → add `ANTHROPIC_API_KEY`. Also set `ASK_LOG_SALT` to any random string, and keep `TRUST_PROXY=1` so rate limits see real visitor IPs. Deploy. The `knowledge/` folder ships with the repo, so the backend finds it at `../knowledge`. If the Render service is ever set to deploy only the `backend/` folder, set `KNOWLEDGE_DIR` instead.
