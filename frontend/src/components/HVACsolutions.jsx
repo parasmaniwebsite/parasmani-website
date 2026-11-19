@@ -1,11 +1,11 @@
 import kFlexLogo from "../assets/hvac/kflex.png";
-import gurutronicsLogo from "../assets/hvac/gurutronics.png";
+import refronLogo from "../assets/hvac/refron.png";
 import activeLogo from "../assets/hvac/active.png";
 
 const HVACSolutions = () => {
   const partners = [
     { name: "K-FLEX", logo: kFlexLogo, offset: "lg:-translate-x-50" },
-    { name: "Gurutronics", logo: gurutronicsLogo, offset: "lg:-translate-x-10" },
+    { name: "Refron", logo: refronLogo, offset: "lg:-translate-x-10" },
     { name: "ACtive", logo: activeLogo, offset: "lg:-translate-x-50" },
   ];
 
@@ -19,13 +19,13 @@ const HVACSolutions = () => {
           </h2>
 
           <h3 className="mb-[30px] font-albert text-[24px] font-[400] leading-[1.1] tracking-wide text-[#C68344]">
-            Gurutronics Automations Pvt Ltd | K-Flex | Active
+            K-Flex | Refron | Active
           </h3>
 
           <p className="font-albert text-[17px] font-normal leading-[1.35] tracking-wide text-[#4A4A4A]">
             Alongside our copper tubes, we offer complementary HVAC products–
-            insulation, condensate drain pumps, and control panels giving
-            contractors and installers a single, reliable source and simplifying
+            insulation, condensate drain pumps, and refrigerant gases like R32,
+            R410A and more, giving contractors and installers a single, reliable source and simplifying
             procurement.
           </p>
         </div>
