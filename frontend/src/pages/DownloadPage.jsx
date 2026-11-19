@@ -27,6 +27,7 @@ import supplierCodePdf from "../assets/downloads/Policies/Parasmani-Supplier-Cod
 import qualityPolicyPdf from "../assets/downloads/Policies/Parasmani-Quality-Policy.pdf";
 import isoCertificationsPdf from "../assets/downloads/Certifications/Parasmani-ISO-Certifications.pdf";
 import installationGuidelinesPdf from "../assets/downloads/Technical-Handbooks/Parasmani-Installation-Guidelines.pdf";
+import hvacrSubmittalPdf from "../assets/downloads/Submittal/Parasmani-HVAC-R-Submittal-2026.pdf";
 
 const DownloadPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -94,7 +95,13 @@ const DownloadPage = () => {
         },
         {
             category: "Submittal",
-            items: [{ title: "Parasmani-HVAC-R-Submittal-2026" }],
+            items: [
+                {
+                    title: "Parasmani-HVAC-R-Submittal-2026",
+                    file: hvacrSubmittalPdf,
+                    filename: "Parasmani-HVAC-R-Submittal-2026.pdf",
+                },
+            ],
             hasHardCopyRequest: true,
         },
         {
